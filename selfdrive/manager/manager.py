@@ -36,14 +36,14 @@ def manager_init():
     ("OpenpilotEnabledToggle", "1"),
 
     # add
-    ("IsMetric", "1"),
+    ("IsMetric", "0"),
     ("LongControlSelect", "0"),
-    ("AutoLaneChangeEnabled", "0"),
+    ("AutoLaneChangeEnabled", "1"),
     ("PutPrebuilt", "0"),
     ("MfcSelect", "0"),
     ("LateralControlSelect", "0"),
-    ("DisableShutdownd", "0"),
-    ("DisableLogger", "0"),
+    ("DisableShutdownd", "1"),
+    ("DisableLogger", "1"),
     ("DisableGps", "1"),
   ]
   if not PC:
