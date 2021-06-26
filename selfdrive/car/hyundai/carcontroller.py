@@ -11,7 +11,7 @@ from opendbc.can.packer import CANPacker
 from selfdrive.config import Conversions as CV
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
-min_set_speed = 30 * CV.KPH_TO_MS
+min_set_speed = 0 * CV.KPH_TO_MS
 
 # Accel limits
 ACCEL_HYST_GAP = 0.02  # don't change accel command for small oscillations within this value
@@ -92,8 +92,8 @@ class CarController():
     lkas_active = enabled and abs(CS.out.steeringAngleDeg) < CS.CP.maxSteeringAngleDeg
 
     # fix for Genesis hard fault at low speed
-    if CS.out.vEgo < 55 * CV.KPH_TO_MS and self.car_fingerprint == CAR.GENESIS and not CS.mdps_bus:
-      lkas_active = False
+    #if CS.out.vEgo < 55 * CV.KPH_TO_MS and self.car_fingerprint == CAR.GENESIS and not CS.mdps_bus:
+      #lkas_active = False
 
     # Disable steering while turning blinker on and speed below 60 kph
     if CS.out.leftBlinker or CS.out.rightBlinker:
