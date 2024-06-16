@@ -12,8 +12,7 @@ ECU_NAME = {v: k for k, v in Ecu.schema.enumerants.items()}
 
 
 def check_fw_version(fw_version: bytes) -> bool:
-  # TODO: just use the FW patterns, need to support all chunks
-  return b'?' not in fw_version and b'!' not in fw_version
+  return b'?' not in fw_version
 
 
 class TestToyotaInterfaces:

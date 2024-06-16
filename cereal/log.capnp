@@ -371,6 +371,7 @@ struct DeviceState @0xa4d8b5af2aa492eb {
   cpuTempC @26 :List(Float32);
   gpuTempC @27 :List(Float32);
   memoryTempC @28 :Float32;
+  ambientTempC @30 :Float32;
   nvmeTempC @35 :List(Float32);
   modemTempC @36 :List(Float32);
   pmicTempC @39 :List(Float32);
@@ -445,7 +446,6 @@ struct DeviceState @0xa4d8b5af2aa492eb {
   chargingErrorDEPRECATED @17 :Bool;
   chargingDisabledDEPRECATED @18 :Bool;
   usbOnlineDEPRECATED @12 :Bool;
-  ambientTempC @30 :Float32;
 }
 
 struct PandaState @0xa7649e2575e4591e {
@@ -709,6 +709,7 @@ struct ControlsState @0x97ff69c53601abf1 {
   aTarget @35 :Float32;
   curvature @37 :Float32;  # path curvature from vehicle model
   desiredCurvature @61 :Float32;  # lag adjusted curvatures used by lateral controllers
+  desiredCurvatureRate @62 :Float32;
   forceDecel @51 :Bool;
 
   # UI alerts
@@ -924,40 +925,8 @@ struct ControlsState @0x97ff69c53601abf1 {
   steerOverrideDEPRECATED @20 :Bool;
   steeringAngleDesiredDegDEPRECATED @29 :Float32;
   canMonoTimesDEPRECATED @21 :List(UInt64);
-  desiredCurvatureRate @62 :Float32;
   canErrorCounterDEPRECATED @57 :UInt32;
   vPidDEPRECATED @2 :Float32;
-}
-
-struct DrivingModelData {
-  frameId @0 :UInt32;
-  frameIdExtra @1 :UInt32;
-  frameDropPerc @6 :Float32;
-
-  action @2 :ModelDataV2.Action;
-
-  laneLineMeta @3 :LaneLineMeta;
-  meta @4 :MetaData;
-
-  path @5 :PolyPath;
-
-  struct PolyPath {
-    xCoefficients @0 :List(Float32);
-    yCoefficients @1 :List(Float32);
-    zCoefficients @2 :List(Float32);
-  }
-
-  struct LaneLineMeta {
-    leftY @0 :Float32;
-    rightY @1 :Float32;
-    leftProb @2 :Float32;
-    rightProb @3 :Float32;
-  }
-
-  struct MetaData {
-    laneChangeState @0 :LaneChangeState;
-    laneChangeDirection @1 :LaneChangeDirection;
-  }
 }
 
 # All SI units and in device frame
@@ -2445,6 +2414,7 @@ struct Event {
     carControl @23 :Car.CarControl;
     carOutput @127 :Car.CarOutput;
     longitudinalPlan @24 :LongitudinalPlan;
+    lateralPlan @64 :LateralPlan;
     ubloxGnss @34 :UbloxGnss;
     ubloxRaw @39 :Data;
     qcomGnss @31 :QcomGnss;
@@ -2460,7 +2430,6 @@ struct Event {
     driverMonitoringState @71: DriverMonitoringState;
     liveLocationKalman @72 :LiveLocationKalman;
     modelV2 @75 :ModelDataV2;
-    drivingModelData @128 :DrivingModelData;
     driverStateV2 @92 :DriverStateV2;
 
     # camera stuff, each camera state has a matching encode idx
@@ -2514,8 +2483,8 @@ struct Event {
     customReservedRawData1 @125 :Data;
     customReservedRawData2 @126 :Data;
 
-    liveENaviData @129: LiveENaviData;
-    liveMapData @130: LiveMapData;
+    liveENaviData @128: LiveENaviData;
+    liveMapData @129: LiveMapData;
 
     # *********** Custom: reserved for forks ***********
     customReserved0 @107 :Custom.CustomReserved0;
@@ -2567,7 +2536,6 @@ struct Event {
     pandaStateDEPRECATED @12 :PandaState;
     driverStateDEPRECATED @59 :DriverStateDEPRECATED;
     sensorEventsDEPRECATED @11 :List(SensorEventData);
-    lateralPlan @64 :LateralPlan;
     navModelDEPRECATED @104 :NavModelData;
     uiPlanDEPRECATED @106 :UiPlan;
   }

@@ -385,7 +385,7 @@ static void update_state(UIState *s) {
   scene.world_objects_visible = scene.world_objects_visible ||
                                 (scene.started &&
                                  sm.rcv_frame("liveCalibration") > scene.started_frame &&
-                                 sm.rcv_frame("modelV2") > scene.started_frame);
+                                   sm.rcv_frame("modelV2") > scene.started_frame);
 
   if (sm.updated("lateralPlan")) {
     scene.lateral_plan = sm["lateralPlan"].getLateralPlan();
@@ -472,6 +472,7 @@ static void update_state(UIState *s) {
 void ui_update_params(UIState *s) {
   auto params = Params();
   s->scene.is_metric = params.getBool("IsMetric");
+  s->scene.map_on_left = params.getBool("NavSettingLeftSide");
 }
 
 void UIState::updateStatus() {
@@ -597,7 +598,7 @@ UIState::UIState(QObject *parent) : QObject(parent) {
   sm = std::make_unique<SubMaster, const std::initializer_list<const char *>>({
     "modelV2", "controlsState", "liveCalibration", "radarState", "deviceState",
     "pandaStates", "carParams", "driverMonitoringState", "carState", "liveLocationKalman", "driverStateV2",
-    "wideRoadCameraState", "managerState", "clocks",
+    "wideRoadCameraState", "managerState", "navInstruction", "navRoute", "clocks",
     "peripheralState", "liveParameters", "ubloxGnss", "qcomGnss", "gpsLocationExternal", "gpsLocation",
     "lateralPlan", "longitudinalPlan", "liveENaviData", "liveMapData",
   });
@@ -619,10 +620,6 @@ void UIState::update() {
   update_sockets(this);
   update_state(this);
   updateStatus();
-
-  if (std::getenv("PRIME_TYPE")) {
-      setPrimeType((PrimeType)atoi(std::getenv("PRIME_TYPE")));
-  }
 
   if (sm->frame % UI_FREQ == 0) {
     watchdog_kick(nanos_since_boot());
