@@ -6,7 +6,6 @@
 #include "cereal/services.h"
 #include "cereal/messaging/messaging.h"
 
-
 const bool SIMULATION = (getenv("SIMULATION") != nullptr) && (std::string(getenv("SIMULATION")) == "1");
 
 static inline bool inList(const std::vector<const char *> &list, const char *value) {
