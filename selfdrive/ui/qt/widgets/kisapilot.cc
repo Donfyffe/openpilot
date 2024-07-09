@@ -166,6 +166,7 @@ CLongControlGroup::CLongControlGroup() : CGroupWidget( tr("Long Control") )
   pBoxLayout->addWidget(new StockDecelonCamToggle());
   //pBoxLayout->addWidget(new RadarDisableToggle());
   pBoxLayout->addWidget(new UseRadarTrackToggle());
+  pBoxLayout->addWidget(new UseRadarValue());
   pBoxLayout->addWidget(new LongAlternative());
   pBoxLayout->addWidget(new KISACruiseGapSet());
 }

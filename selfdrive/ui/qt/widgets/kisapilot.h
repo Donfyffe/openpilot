@@ -738,6 +738,18 @@ public:
   }
 };
 
+class UseRadarValue : public ToggleControl {
+  Q_OBJECT
+
+public:
+  UseRadarValue() : ToggleControl(tr("Use Radar for lead car"), tr("If the radar detects a lead car, the device uses radar values (distance, relative velocity, etc.) because vision can sometimes be inaccurate."), "../assets/offroad/icon_shell.png", Params().getBool("UseRadarValue")) {
+    QObject::connect(this, &UseRadarValue::toggleFlipped, [=](int state) {
+      bool status = state ? true : false;
+      Params().putBool("UseRadarValue", status);
+    });
+  }
+};
+
 class RadarDisableToggle : public ToggleControl {
   Q_OBJECT
 

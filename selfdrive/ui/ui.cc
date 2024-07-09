@@ -574,6 +574,7 @@ void UIState::updateStatus() {
     scene.model_name = QString::fromStdString(params.get("DrivingModel"));
     scene.hotspot_on_boot = params.getBool("KisaHotspotOnBoot");
     scene.user_specific_feature = std::stoi(params.get("UserSpecificFeature"));
+    scene.use_radar_value = params.getBool("UseRadarValue");
 
     if (scene.autoScreenOff > 0) {
       scene.nTime = scene.autoScreenOff * 60 * UI_FREQ;

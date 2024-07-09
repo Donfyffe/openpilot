@@ -91,7 +91,7 @@ void AnnotatedCameraWidget::updateState(const UIState &s) {
   over_sl = s.scene.limitSpeedCamera > 19 && ((s.scene.car_state.getVEgo() * (s.scene.is_metric ? MS_TO_KPH : MS_TO_MPH)) > s.scene.ctrl_speed+1.5);
 
   auto lead_one = sm["radarState"].getRadarState().getLeadOne();
-  if (s.scene.radarDRel < 149 && s.scene.user_specific_feature == 12) {
+  if (s.scene.radarDRel < 149 && s.scene.use_radar_value) {
     dist_rel = s.scene.radarDRel;
     vel_rel = s.scene.radarVRel;
   } else {

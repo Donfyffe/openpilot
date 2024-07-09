@@ -3731,6 +3731,17 @@ This may take up to a minute.</source>
     </message>
 </context>
 <context>
+    <name>UseRadarValue</name>
+    <message>
+        <source>Use Radar for lead car</source>
+        <translation>선행차 레이더 값 우선 사용</translation>
+    </message>
+    <message>
+        <source>If the radar detects a lead car, the device uses radar values (distance, relative velocity, etc.) because vision can sometimes be inaccurate.</source>
+        <translation>선행차량 감지시 비전값보다 레이더값을 우선해서 사용합니다. 비전 값은 때때로 정확하지 않은 경우가 있습니다.</translation>
+    </message>
+</context>
+<context>
     <name>RadarDisableToggle</name>
     <message>
         <source>Disable Radar</source>
