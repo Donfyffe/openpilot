@@ -224,34 +224,37 @@ def hardware_thread(end_event, hw_queue) -> None:
     peripheralState = sm['peripheralState']
     peripheral_panda_present = peripheralState.pandaType != log.PandaState.PandaType.unknown
 
-    if sm.updated['pandaStates'] and len(pandaStates) > 0:
+    if is_openpilot_view_enabled == 0:
+      if sm.updated['pandaStates'] and len(pandaStates) > 0:
 
-      # Set ignition based on any panda connected
-      onroad_conditions["ignition"] = any(ps.ignitionLine or ps.ignitionCan for ps in pandaStates if ps.pandaType != log.PandaState.PandaType.unknown)
+        # Set ignition based on any panda connected
+        onroad_conditions["ignition"] = any(ps.ignitionLine or ps.ignitionCan for ps in pandaStates if ps.pandaType != log.PandaState.PandaType.unknown)
 
-      pandaState = pandaStates[0]
+        pandaState = pandaStates[0]
 
-      in_car = pandaState.harnessStatus != log.PandaState.HarnessStatus.notConnected
+        in_car = pandaState.harnessStatus != log.PandaState.HarnessStatus.notConnected
 
-      # Setup fan handler on first connect to panda
-      if fan_controller is None and peripheral_panda_present:
-        if TICI:
-          fan_controller = TiciFanController()
-    elif params.get_bool("IsOpenpilotViewEnabled") and not params.get_bool("IsDriverViewEnabled") and is_openpilot_view_enabled == 0:
-      is_openpilot_view_enabled = 1
-      onroad_conditions["ignition"] = True
-    elif not params.get_bool("IsOpenpilotViewEnabled") and not params.get_bool("IsDriverViewEnabled") and is_openpilot_view_enabled == 1:
-      is_openpilot_view_enabled = 0
-      onroad_conditions["ignition"] = False
-    elif not is_openpilot_view_enabled:
-      if (time.monotonic() - sm.recv_time['pandaStates']) > DISCONNECT_TIMEOUT:
+        # Setup fan handler on first connect to panda
+        if fan_controller is None and peripheral_panda_present:
+          if TICI:
+            fan_controller = TiciFanController()
+
+      elif (time.monotonic() - sm.recv_time['pandaStates']) > DISCONNECT_TIMEOUT:
         if onroad_conditions["ignition"]:
           onroad_conditions["ignition"] = False
           cloudlog.error("panda timed out onroad")
 
+    if (count % int(5. / DT_HW)) == 0:
+      if params.get_bool("IsOpenpilotViewEnabled") and not params.get_bool("IsDriverViewEnabled") and is_openpilot_view_enabled == 0:
+        is_openpilot_view_enabled = 1
+        onroad_conditions["ignition"] = True
+      elif not params.get_bool("IsOpenpilotViewEnabled") and not params.get_bool("IsDriverViewEnabled") and is_openpilot_view_enabled == 1:
+        is_openpilot_view_enabled = 0
+        onroad_conditions["ignition"] = False
+
     # Run at 2Hz, plus rising edge of ignition
     ign_edge = started_ts is None and onroad_conditions["ignition"]
-    if (sm.frame % round(SERVICE_LIST['pandaStates'].frequency * DT_HW) != 0) and not ign_edge:
+    if (sm.frame % round(SERVICE_LIST['pandaStates'].frequency * DT_HW) != 0) and not ign_edge and is_openpilot_view_enabled == 0:
       continue
 
     msg = read_thermal(thermal_config)
