@@ -44,7 +44,6 @@ def manager_init() -> None:
     ("OpenpilotEnabledToggle", "1"),
     ("LongitudinalPersonality", str(log.LongitudinalPersonality.standard)),
     ("IsMetric", "1"),
-    ("IsOpenpilotViewEnabled", "0"),
     ("KisaAutoShutdown", "12"),
     ("KisaForceShutdown", "5"),
     ("KisaAutoScreenOff", "-2"),

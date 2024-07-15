@@ -50,6 +50,7 @@ void OnroadWindow::updateState(const UIState &s) {
     // kisapilot
     if (s.scene.show_error) {
       if(access("/data/log/error.txt", F_OK ) != -1) {
+        params.putBool("ErrorOccurred", true);
         const std::string txt = util::read_file("/data/log/error.txt");
         if (RichTextDialog::alert(QString::fromStdString(txt), this)) {
           QProcess::execute("rm -f /data/log/error.txt");

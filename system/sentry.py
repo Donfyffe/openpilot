@@ -44,7 +44,7 @@ def set_tag(key: str, value: str) -> None:
   sentry_sdk.set_tag(key, value)
 
 def save_exception(exc_text):
-  if not ("athenad.py" in exc_text or "mapd.py" in exc_text): # ignore athenad.py or mapd.py error
+  if not "mapd.py" in exc_text: # ignore mapd.py error
     if not os.path.exists('/data/log'):
       os.makedirs('/data/log')
     log_file = '/data/log/error.txt'
