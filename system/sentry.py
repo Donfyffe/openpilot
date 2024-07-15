@@ -1,4 +1,6 @@
 """Install exception handler for process crash."""
+import os
+import traceback
 import sentry_sdk
 from enum import Enum
 from sentry_sdk.integrations.threading import ThreadingIntegration
@@ -28,6 +30,7 @@ def report_tombstone(fn: str, message: str, contents: str) -> None:
 
 
 def capture_exception(*args, **kwargs) -> None:
+  save_exception(traceback.format_exc())
   cloudlog.error("crash", exc_info=kwargs.get('exc_info', 1))
 
   try:
@@ -40,6 +43,14 @@ def capture_exception(*args, **kwargs) -> None:
 def set_tag(key: str, value: str) -> None:
   sentry_sdk.set_tag(key, value)
 
+def save_exception(exc_text):
+  if not ("athenad.py" in exc_text or "mapd.py" in exc_text): # ignore athenad.py or mapd.py error
+    if not os.path.exists('/data/log'):
+      os.makedirs('/data/log')
+    log_file = '/data/log/error.txt'
+    with open(log_file, 'w') as f:
+      f.write(exc_text)
+      f.close()
 
 def init(project: SentryProject) -> bool:
   build_metadata = get_build_metadata()
