@@ -112,8 +112,6 @@ class DesireHelper:
           self.output_scale = controlsstate.lateralControlState.torqueState.output
         elif controlsstate.lateralControlMethod == 4:
           self.output_scale = controlsstate.lateralControlState.atomState.output
-        elif controlsstate.lateralControlMethod == 5:
-          self.output_scale = controlsstate.lateralControlState.angleState.steeringAngleDesiredDeg
     except:
       pass
     v_ego = carstate.vEgo
