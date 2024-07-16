@@ -1,3 +1,7 @@
+2024-07-16
+- Notre Dame Model
+- Re-Add exception log, Manual onroad view
+- Bug fixes
 2024-05-18
 - AgnOS 10.1
 - Support CanFD cars overally with UFC
