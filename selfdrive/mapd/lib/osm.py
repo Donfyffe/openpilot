@@ -4,7 +4,7 @@ import subprocess
 import numpy as np
 from openpilot.selfdrive.mapd.lib.geo import R
 
-#import overpy
+import overpy
 
 
 def create_way(way_id, node_ids, from_way):
