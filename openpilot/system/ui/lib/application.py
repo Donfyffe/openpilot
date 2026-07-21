@@ -302,7 +302,7 @@ class GuiApplication:
     self._render_profile_start_time = None
 
     self._record_enabled = False
-    self._record_dir = Path("/data/media/0/videos")
+    self._record_dir = Path("/mnt/usb/videos")
     self._record_max_sec = 60
     self._record_t0 = 0.0
     self._record_every_n = 3
