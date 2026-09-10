@@ -15,7 +15,7 @@ Xiaoge Vision 是 CarrotPilot 的本地视觉扩展。它使用 comma3 的 Visio
 
 ### 启用
 
-在 Carrot Web（端口 7000）的 **设置 → 驾驶控制 → 转向 → 变道 (自动转向) → ONNX 车道与盲点识别** 中开关。它使用现有 `ShareData` 参数，默认关闭并保留已有值。关闭后停止视觉和原有 TCP 7711 服务；车辆 OEM BSD 保持有效。
+在 Carrot Web（端口 7000）的 **设置 → 驾驶控制 → 转向 → ONNX 车道与盲点 → ONNX 车道与盲点识别** 中开关。它使用现有 `ShareData` 参数，默认关闭并保留已有值。关闭后停止视觉和原有 TCP 7711 服务；车辆 OEM BSD 保持有效。
 
 ### 功能和原理
 
@@ -43,12 +43,13 @@ V-ASM 仅在以下条件全部满足时推理：
 BSD 使用黄色侧边路障。车道位置来自驾驶模型，`lane.onnx` 只提供实线/虚线分类。
 OEM BSD 提示不依赖 `ShareData`；驾驶告警仍在最上层。V-ASM 的速度、方向和车道宽度条件保持不变。
 
-### Web 调试页面
+### Web 设置与调试
 
-打开 `http://<comma-ip>:8082`：
+在 Carrot Web 的 **设置 → 驾驶控制 → 转向 → ONNX 车道与盲点** 中打开详细设置。该页面使用 Carrot Web 的通用组件和设计令牌，提供运行状态、车道/BSD 置信度、处理性能、相机快照、BSD 区域编辑及五项持久化参数。
+旧版页面暂时保留在 `http://<comma-ip>:7000/xiaoge/` 作为兼容入口；7000 端口仅将请求转发到本机回环地址的 8082 服务，因此 8082 不再直接暴露到局域网。
 
 - 默认适配手机浏览器；宽度达到 900px 时自动显示为左侧车道线、右侧 V-ASM 的电脑双栏布局。
-- 支持中文/English 切换，显示模型状态、推理耗时、频率、检测置信度和原始状态 JSON。
+- 支持中文/English/한국어 切换，并沿用工具菜单的语言；显示模型状态、推理耗时、频率、检测置信度和原始状态 JSON。
 - 相机就绪后自动加载第一帧；首次加载失败会重试，并显示加载状态。之后点击对应“刷新画面”按钮获取新快照，不会连续播放视频。
 - V-ASM 页面显示门控条件、目标侧和当前车道宽度；可在广角图像上修改左右盲区多边形。
 - 未保存配置时使用内置的 1928x1208 广角默认多边形；“恢复默认标注”会删除本地覆盖配置。
@@ -95,7 +96,7 @@ data service. Camera inference requires `camerad` to be running. Do not also lau
 
 ### Enabling the feature
 
-Use **Carrot Web (port 7000) → Settings → Driving → Steering → Lane Change (Auto Turn) → ONNX Lane and BSD Detection**. The toggle uses the existing `ShareData` parameter, defaults to off, and preserves saved values. Turning it off stops vision and the existing TCP 7711 service; OEM BSD remains available.
+Use **Carrot Web (port 7000) → Settings → Driving → Steering → ONNX Lane & BSD → ONNX Lane and BSD Detection**. The toggle uses the existing `ShareData` parameter, defaults to off, and preserves saved values. Turning it off stops vision and the existing TCP 7711 service; OEM BSD remains available.
 
 ### Features and operation
 
@@ -127,13 +128,14 @@ from the driving model; `lane.onnx` supplies only solid/dashed classification.
 OEM BSD warnings also work with `ShareData` off. Driving alerts remain on top. The existing V-ASM
 speed, direction, and lane-width conditions are unchanged.
 
-### Web diagnostics
+### Web settings and diagnostics
 
-Open `http://<comma-ip>:8082`.
+Open **Carrot Web → Settings → Driving → Steering → ONNX Lane & BSD**. The detail screen uses the shared Carrot Web components and tokens for runtime state, lane/BSD confidence, processing performance, camera snapshots, BSD polygon editing, and five persistent tuning values.
+The legacy page remains temporarily available at `http://<comma-ip>:7000/xiaoge/` as a compatibility entry. Port 7000 proxies requests to the loopback-only 8082 service, so 8082 is no longer exposed directly on the LAN.
 
 - The interface is mobile-first. At 900px or wider it automatically becomes a desktop two-column
   view with lanes on the left and V-ASM on the right.
-- Chinese and English are available. The page shows model state, inference latency/rate,
+- Korean, Chinese, and English are available, following the Tools menu language. The page shows model state, inference latency/rate,
   confidence, and raw status JSON.
 - The first snapshot loads automatically when its camera is ready, with retries and visible loading
   status. Use the matching refresh button for later snapshots; the images are not a continuous video feed.
@@ -187,7 +189,7 @@ ONNX 모델을 실행하고, 하나의 버전 관리된 `xiaogeVision` JSON 메�
 
 ### 기능 켜기
 
-**Carrot Web(7000번 포트) → 설정 → 주행 제어 → 차량 조향 → 차로 변경 (자동 턴) → ONNX 차선·BSD 인식**에서 켜고 끕니다. 기존 `ShareData` 파라미터를 사용하며 기본값은 꺼짐이고 저장값은 유지합니다. 끄면 비전과 기존 TCP 7711 서비스가 중지되고 차량 자체 BSD는 유지됩니다.
+**Carrot Web(7000번 포트) → 설정 → 주행 제어 → 차량 조향 → ONNX 차선·BSD → ONNX 차선·BSD 인식**에서 켜고 끕니다. 기존 `ShareData` 파라미터를 사용하며 기본값은 꺼짐이고 저장값은 유지합니다. 끄면 비전과 기존 TCP 7711 서비스가 중지되고 차량 자체 BSD는 유지됩니다.
 
 ### 기능 및 동작 원리
 
@@ -218,12 +220,13 @@ BSD는 ‘대기’, 검사한 쪽의 ‘미감지’, ‘감지’를 구분합
 차량 자체 BSD 경고는 `ShareData`가 꺼져 있어도 표시하며, 주행 경고는 가장 위에 나옵니다.
 V-ASM의 기존 속도·방향·차선 폭 조건은 유지합니다.
 
-### 웹 진단 페이지
+### 웹 설정과 진단
 
-`http://<comma-ip>:8082`를 여십시오.
+Carrot Web의 **설정 → 주행 제어 → 차량 조향 → ONNX 차선·BSD** 상세 화면을 여십시오. 공통 Carrot Web 컴포넌트와 토큰으로 실행 상태, 차선/BSD 신뢰도, 처리 성능, 카메라 스냅샷, BSD 감지 영역 편집과 저장되는 세부값 5개를 제공합니다.
+기존 페이지는 호환용으로 `http://<comma-ip>:7000/xiaoge/`에 잠시 유지합니다. 7000번 서버가 로컬 루프백의 8082 서비스로 요청을 전달하므로 8082는 더 이상 LAN에 직접 노출되지 않습니다.
 
 - 모바일 우선 UI이며, 너비가 900px 이상이면 왼쪽 차선/오른쪽 V-ASM의 데스크톱 2열 보기로 자동 전환됩니다.
-- 중국어와 영어 전환을 지원하며 모델 상태, 추론 시간/주기, 신뢰도, 원시 상태 JSON을 표시합니다.
+- 도구 메뉴의 언어를 이어받으며 한국어·영어·중국어 전환을 지원합니다. 모델 상태, 추론 시간/주기, 신뢰도, 원시 상태 JSON을 표시합니다.
 - 카메라가 준비되면 첫 스냅샷을 자동으로 가져오며, 처음 실패하면 재시도하고 로딩 상태를 표시합니다. 이후에는 각 새로고침 버튼으로 새 사진을 가져옵니다. 연속 재생 영상은 아닙니다.
 - V-ASM 패널은 실행 조건, 대상 측, 차선 폭을 표시하며 광각 영상에서 좌우 사각지대 다각형을 편집할 수 있습니다.
 - 로컬 설정을 저장하기 전에는 내장 1928x1208 광각 기본 다각형을 사용합니다. 주석을 초기화하면 로컬 설정이 제거됩니다.
